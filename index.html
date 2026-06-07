@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>장단배우기 - 리듬게임</title>
+    <title>국악 장단 배우기 리듬게임</title>
     <style>
         :root {
             --primary-pink: #FF8E99;
             --light-pink: #FFF0F2;
             --dark-pink: #E5737F;
             --bg-color: #FFE4E6;
+            --jangu-body: #D7A15C;
         }
 
         * {
@@ -20,7 +21,7 @@
         }
 
         body {
-            background-color: #f7f7f7;
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,60 +29,60 @@
             padding: 20px;
         }
 
-        /* 메인 태블릿 프레임 */
         #app-container {
             width: 100%;
             max-width: 900px;
-            height: 550px;
+            height: 580px;
             background-color: var(--light-pink);
-            border: 12px solid #333;
+            border: 12px solid #2c3e50;
             border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        /* 상단 네비게이션 */
+        /* 상단 바 */
         .header {
             background-color: var(--primary-pink);
             color: white;
-            padding: 12px 20px;
+            padding: 14px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 19px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .header .btn-back { cursor: pointer; font-size: 20px; }
+        .header .btn-back { cursor: pointer; font-size: 20px; padding: 0 10px; }
         .header .menu-icon { font-size: 20px; }
 
-        /* 화면 세션 공통 */
+        /* 화면 기본 구조 */
         .screen {
             flex: 1;
             display: none;
             position: relative;
-            padding: 20px;
+            padding: 25px;
         }
         .screen.active {
             display: flex;
             flex-direction: column;
         }
 
-        /* ================= 1. 대기/선택 화면 ================= */
+        /* 탭 가이드 */
         .tab-container {
             display: flex;
             gap: 5px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .tab {
-            padding: 8px 16px;
+            padding: 10px 24px;
             background: #e0e0e0;
-            border-radius: 8px 8px 0 0;
-            font-size: 14px;
+            border-radius: 10px 10px 0 0;
+            font-size: 15px;
             font-weight: bold;
-            color: #666;
+            color: #555;
             cursor: pointer;
         }
         .tab.active {
@@ -91,118 +92,179 @@
 
         .main-content {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex: 1;
         }
+
+        /* 악기 사이드바 단일화 */
         .instrument-sidebar {
-            width: 120px;
+            width: 130px;
             background: white;
-            border-radius: 12px;
-            padding: 10px;
+            border-radius: 14px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 2px solid #ffd0d4;
         }
         .instrument-item {
-            padding: 10px;
-            border: 2px solid #eee;
-            border-radius: 8px;
+            width: 100%;
+            padding: 15px 10px;
+            border: 3px solid var(--primary-pink);
+            border-radius: 10px;
             text-align: center;
-            font-size: 12px;
+            font-size: 15px;
             font-weight: bold;
-            cursor: pointer;
-            background: #fafafa;
-        }
-        .instrument-item.active {
-            border-color: var(--primary-pink);
             background: var(--light-pink);
+            color: var(--dark-pink);
         }
         .instrument-icon {
-            width: 50px;
-            height: 40px;
-            margin: 0 auto 5px;
-            background: #ddd;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+            font-size: 32px;
+            margin-bottom: 8px;
         }
 
+        /* 설정 구역 */
         .game-setup-box {
             flex: 1;
             background: white;
-            border-radius: 12px;
-            padding: 25px;
+            border-radius: 14px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
         }
-        .setup-row {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            width: 100%;
-            justify-content: center;
+        
+        .setup-title-area {
+            text-align: center;
         }
-        select, .btn-start {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            border: 1px solid #ccc;
+        .setup-title-area h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 5px;
         }
-        select { width: 250px; background: #fff;}
-        .btn-start {
-            background-color: #4D4DFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s;
+        .setup-title-area p {
+            color: #777;
+            font-size: 14px;
         }
-        .btn-start:hover { background-color: #3333CC; }
 
         .jangdan-preview {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 10px;
+            justify-content: center;
+            margin: 15px 0;
         }
-        .preview-jangu {
-            width: 100px;
-            height: 60px;
-            background: #E6A15C;
-            border-radius: 30px;
+        
+        /* 세밀해진 장구 그래픽 구조 */
+        .jangu-graphic {
+            display: flex;
+            align-items: center;
             position: relative;
         }
-        .preview-jangu::after {
-            content: '';
+        .jangu-side {
+            width: 45px;
+            height: 70px;
+            background: #f4eade;
+            border: 3px solid #8b5a2b;
+            border-radius: 50% / 15%;
+            z-index: 2;
+        }
+        .jangu-center {
+            width: 70px;
+            height: 35px;
+            background: var(--jangu-body);
+            border-top: 3px solid #8b5a2b;
+            border-bottom: 3px solid #8b5a2b;
+            margin: 0 -10px;
+            position: relative;
+            z-index: 1;
+            border-radius: 8px;
+        }
+        .jangu-string {
             position: absolute;
-            top: 5px; left: 45px; width: 10px; height: 50px;
-            background: #BA7834;
+            width: 90px;
+            height: 2px;
+            background: #7f8c8d;
+            top: 15px; left: -10px;
+            transform: rotate(15deg);
+            z-index: 1;
+        }
+        .jangu-string2 {
+            position: absolute;
+            width: 90px;
+            height: 2px;
+            background: #7f8c8d;
+            bottom: 15px; left: -10px;
+            transform: rotate(-15deg);
+            z-index: 1;
         }
 
-        /* ================= 2. 게임 플레이 화면 ================= */
+        .setup-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+            align-items: center;
+        }
+        .select-label {
+            font-weight: bold;
+            color: #444;
+            align-self: flex-start;
+            font-size: 14px;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+            outline: none;
+        }
+        select:focus {
+            border-color: var(--primary-pink);
+        }
+        .btn-start {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #4D4DFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(77,77,255,0.3);
+        }
+        .btn-start:hover { background-color: #3333CC; }
+        .btn-start:active { transform: scale(0.98); }
+
+        /* ================= 게임 플레이 화면 ================= */
         .game-header-info {
             display: flex;
             justify-content: space-between;
-            background: rgba(255,255,255,0.7);
-            padding: 8px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: rgba(255,255,255,0.85);
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
             font-weight: bold;
+            font-size: 15px;
+            border: 1px solid #ffd0d4;
         }
         
-        /* 리듬 레일 */
         .stage-area {
             position: relative;
             flex: 1;
-            background: white;
-            border-radius: 15px;
+            background: #fafafa;
+            border-radius: 16px;
             border: 3px dashed var(--primary-pink);
             overflow: hidden;
             display: flex;
@@ -210,108 +272,184 @@
             justify-content: center;
         }
         
-        .rail {
-            position: absolute;
-            left: 0; right: 0;
+        /* 2줄 레일 레이아웃: 상단(쿵/덩), 하단(따) */
+        .rail-container {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+        }
+        .rail-line {
             height: 80px;
-            background: rgba(255, 142, 153, 0.05);
-            border-top: 2px solid #FFD0D4;
-            border-bottom: 2px solid #FFD0D4;
+            width: 100%;
+            border-bottom: 1px dashed #e0e0e0;
+            position: relative;
             display: flex;
             align-items: center;
         }
-
-        /* 판정선 (오른쪽에서 왼쪽으로 흐르므로 좌측에 배치) */
-        .judgment-line {
+        .rail-line:last-child { border-bottom: none; }
+        .rail-label {
             position: absolute;
-            left: 120px;
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--dark-pink);
-            border-radius: 50%;
-            background: rgba(255,255,255,0.6);
-            z-index: 10;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            left: 15px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 5;
         }
 
-        /* 노트 스타일 */
+        /* 판정선 기준 원 */
+        .judgment-zone {
+            position: absolute;
+            left: 140px;
+            width: 64px;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .target-ring {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ring-circle {
+            width: 54px;
+            height: 54px;
+            border: 4px solid var(--dark-pink);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            box-shadow: 0 0 8px rgba(229,115,127,0.4);
+        }
+
+        /* 신규 세분화 노트 */
         .note {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+            transition: transform 0.1s;
         }
-        .note.type-kung { background: #FF5E7E; } /* 쿵 (왼쪽) */
-        .note.type-tta { background: #4A90E2; }  /* 따 (오른쪽) */
+        .note.type-deong { background: linear-gradient(135deg, #f39c12, #d35400); border: 2px solid #fff; } /* 덩 */
+        .note.type-kung { background: linear-gradient(135deg, #ff4757, #ff6b81); border: 2px solid #fff; }  /* 쿵 */
+        .note.type-tta { background: linear-gradient(135deg, #1e90ff, #70a1ff); border: 2px solid #fff; }   /* 따 */
+        .note.type-deok { background: linear-gradient(135deg, #2ed573, #7bed9f); border: 2px solid #fff; }  /* 덕 */
 
-        /* 터치/키 입력용 북 패드 비주얼 */
+        /* 타격 이펙트용 가상 컨테이너 */
+        #note-zone {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0; left: 0;
+            z-index: 3;
+        }
+
+        /* 리듬 입력용 패드 구조 변경 (좌:북편 / 우:채편) */
         .pad-container {
             display: flex;
             justify-content: space-between;
-            padding: 0 40px;
-            margin-top: auto;
-            margin-bottom: 10px;
+            gap: 20px;
+            padding: 0 20px;
+            margin-top: 15px;
+        }
+        .pad-group {
+            flex: 1;
+            display: flex;
+            gap: 10px;
         }
         .drum-pad {
-            width: 140px;
-            height: 140px;
-            background: #FFE0B2;
-            border: 8px solid #E6A15C;
-            border-radius: 50%;
+            flex: 1;
+            height: 110px;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: #795548;
+            font-size: 18px;
             cursor: pointer;
             user-select: none;
-            box-shadow: 0 6px #BCAAA4;
             transition: transform 0.05s, box-shadow 0.05s;
         }
-        .drum-pad:active, .drum-pad.pressed {
-            transform: translateY(6px);
-            box-shadow: 0 0px #BCAAA4;
-            background: #FFCC80;
+        
+        /* 북편 패드 (쿵, 덩) */
+        .pad-left-side {
+            background: #ffebd7;
+            border: 5px solid #d35400;
+            color: #d35400;
+            box-shadow: 0 6px #a04000;
         }
-        .drum-pad span { font-size: 12px; color: #8D6E63; margin-top: 4px; }
+        .pad-left-side:active, .pad-left-side.pressed {
+            transform: translateY(6px);
+            box-shadow: 0 0px #a04000;
+            background: #fbe3cc;
+        }
 
-        /* 판정 텍스트 팝업 (좋다! 얼씨구!) */
+        /* 채편 패드 (따, 덕) */
+        .pad-right-side {
+            background: #e3f2fd;
+            border: 5px solid #1e90ff;
+            color: #1e90ff;
+            box-shadow: 0 6px #1565c0;
+        }
+        .pad-right-side:active, .pad-right-side.pressed {
+            transform: translateY(6px);
+            box-shadow: 0 0px #1565c0;
+            background: #d4eafc;
+        }
+
+        .drum-pad span {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+            background: rgba(255,255,255,0.6);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* 판정 토스트 */
         .judge-toast {
             position: absolute;
             left: 50%;
-            top: 35%;
-            transform: translate(-50%, -50%) scale(0.5);
-            font-size: 38px;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 42px;
             font-weight: bold;
-            color: #2ECC71;
-            text-shadow: 2px 2px 0px #white, -2px -2px 0px white;
+            text-shadow: 2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, -2px 2px 0px #fff;
             opacity: 0;
-            z-index: 20;
+            z-index: 10;
             pointer-events: none;
         }
         @keyframes popUp {
-            0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
             20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
             80% { transform: translate(-50%, -50%) scale(1.0); opacity: 1; }
             100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
         }
 
-        /* ================= 3. 결과 화면 ================= */
+        /* ================= 결과 화면 ================= */
         .result-box {
             background: white;
-            border-radius: 15px;
+            border-radius: 16px;
             flex: 1;
-            padding: 20px;
+            padding: 25px;
             display: flex;
-            gap: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            gap: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #eee;
         }
         .result-left {
             flex: 1;
@@ -319,34 +457,32 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-right: 2px dashed #eee;
+            border-right: 2px dashed #eed5d7;
         }
         .result-right {
             flex: 1.2;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 12px;
-            padding-left: 10px;
+            gap: 14px;
         }
-        .score-title { font-size: 20px; font-weight: bold; color: #555; margin-bottom: 5px; }
-        .stars { color: #FFD700; font-size: 28px; margin-bottom: 10px; letter-spacing: 2px; }
-        .total-score { font-size: 64px; font-weight: bold; color: #444; }
+        .score-title { font-size: 21px; font-weight: bold; color: #555; }
+        .stars { color: #FFD700; font-size: 32px; margin: 5px 0; letter-spacing: 3px; }
+        .total-score { font-size: 68px; font-weight: bold; color: #2c3e50; }
         
         .score-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: bold;
-            color: #666;
+            color: #555;
         }
         .score-label-badge {
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 12px;
             font-size: 12px;
             color: white;
-            margin-right: 6px;
         }
         .badge-combo { background: #FF8E99; }
         .badge-perfect { background: #2ECC71; }
@@ -358,16 +494,20 @@
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 15px;
+            margin-top: 20px;
         }
         .btn-action {
-            padding: 10px 25px;
-            border-radius: 20px;
+            padding: 12px 30px;
+            border-radius: 25px;
             font-weight: bold;
+            font-size: 15px;
             border: none;
             cursor: pointer;
             color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
         }
+        .btn-action:active { transform: scale(0.95); }
         .btn-retry { background: #4A90E2; }
         .btn-save { background: #E67E22; }
     </style>
@@ -375,56 +515,52 @@
 <body>
 
 <div id="app-container">
-    <!-- 네비게이션 헤더 -->
     <div class="header">
         <span class="btn-back" onclick="goBack()">➔</span>
-        <span id="header-title">장단배우기</span>
+        <span id="header-title">국악 장단 배우기</span>
         <span class="menu-icon">☰</span>
     </div>
 
     <!-- 1. 대기 및 설정 화면 -->
     <div id="screen-setup" class="screen active">
         <div class="tab-container">
-            <div class="tab active">장단 익히기</div>
-            <div class="tab">장단꼴 만들기</div>
+            <div class="tab active">정통 장단 익히기</div>
         </div>
 
         <div class="main-content">
-            <!-- 악기 선택 사이드바 -->
+            <!-- 단일 악기 가이드 (장구만 유지) -->
             <div class="instrument-sidebar">
-                <div class="instrument-item active">
+                <div class="instrument-item">
                     <div class="instrument-icon">🪘</div>
-                    장구
-                </div>
-                <div class="instrument-item">
-                    <div class="instrument-icon">🟡</div>
-                    괭과리
-                </div>
-                <div class="instrument-item">
-                    <div class="instrument-icon">🥞</div>
-                    징
-                </div>
-                <div class="instrument-item">
-                    <div class="instrument-icon">🥁</div>
-                    북
+                    <div>장구</div>
                 </div>
             </div>
 
             <!-- 중심 설정 구역 -->
             <div class="game-setup-box">
-                <h3 style="color: var(--dark-pink);">자진모리 장단 게임</h3>
+                <div class="setup-title-area">
+                    <h2>국악 리듬 학습 게임</h2>
+                    <p>정확한 정간보 박자에 맞추어 장단을 연습해보세요.</p>
+                </div>
+
                 <div class="jangdan-preview">
-                    <div class="preview-jangu"></div>
+                    <div class="jangu-graphic">
+                        <div class="jangu-side"></div>
+                        <div class="jangu-center">
+                            <div class="jangu-string"></div>
+                            <div class="jangu-string2"></div>
+                        </div>
+                        <div class="jangu-side"></div>
+                    </div>
                 </div>
                 
                 <div class="setup-row">
+                    <span class="select-label">연습할 민요/음악 선택</span>
                     <select id="song-select">
-                        <option value="고사리">고사리꺾자 (성악)</option>
-                        <option value="개고리">개고리 개골청 (반주)</option>
-                        <option value="경복궁">경복궁타령 (성악)</option>
-                        <option value="풍구">풍구타령 (반주)</option>
+                        <option value="doraji">도라지타령 (세마치 장단 - 3분박 3박자)</option>
+                        <option value="gaegori">개고리 개골청 (자진모리 장단 - 3분박 4박자)</option>
                     </select>
-                    <button class="btn-start" onclick="startGame()">시작</button>
+                    <button class="btn-start" onclick="startGame()">학습 시작하기</button>
                 </div>
             </div>
         </div>
@@ -433,7 +569,8 @@
     <!-- 2. 게임 플레이 화면 -->
     <div id="screen-game" class="screen">
         <div class="game-header-info">
-            <span id="playing-song-title">곡명: 고사리꺾자</span>
+            <span id="playing-song-title">곡명: 도라지타령</span>
+            <span id="playing-jangdan-type" style="color:var(--dark-pink)">장단: 세마치</span>
             <span>SCORE: <span id="live-score">0</span></span>
             <span>COMBO: <span id="live-combo">0</span></span>
         </div>
@@ -441,22 +578,46 @@
         <!-- 리듬 플레이 영역 -->
         <div class="stage-area">
             <div class="judge-toast" id="judge-toast">좋다!</div>
-            <div class="rail">
-                <div class="judgment-line"></div>
-                <!-- 노트들이 들어갈 구역 -->
-                <div id="note-zone" style="position: absolute; width:100%; height:100%;"></div>
+            
+            <!-- 판정선 타겟 이펙트 원 고정 -->
+            <div class="judgment-zone">
+                <div class="target-ring"><div class="ring-circle"></div></div>
+                <div class="target-ring"><div class="ring-circle"></div></div>
+            </div>
+
+            <!-- 레일 파트 (상단: 북편, 하단: 채편) -->
+            <div class="rail-container">
+                <div class="rail-line">
+                    <span class="rail-label">북편 (덩/쿵)</span>
+                </div>
+                <div class="rail-line">
+                    <span class="rail-label">채편 (따/덕)</span>
+                </div>
+                <div id="note-zone"></div>
             </div>
         </div>
 
-        <!-- 입력 패드 구역 -->
+        <!-- 분리형 다중 패드 레이아웃 -->
         <div class="pad-container">
-            <div class="drum-pad" id="pad-left" onmousedown="triggerHit('kung')" ontouchstart="triggerHit('kung')">
-                덩 / 쿵
-                <span>[ A 키 ]</span>
+            <div class="pad-group">
+                <div class="drum-pad pad-left-side" id="pad-deong" onmousedown="triggerHit('deong')" ontouchstart="triggerHit('deong')">
+                    덩 (●)
+                    <span>[ A 키 ]</span>
+                </div>
+                <div class="drum-pad pad-left-side" id="pad-kung" onmousedown="triggerHit('kung')" ontouchstart="triggerHit('kung')">
+                    쿵 (○)
+                    <span>[ S 키 ]</span>
+                </div>
             </div>
-            <div class="drum-pad" id="pad-right" onmousedown="triggerHit('tta')" ontouchstart="triggerHit('tta')">
-                따
-                <span>[ L 키 ]</span>
+            <div class="pad-group">
+                <div class="drum-pad pad-right-side" id="pad-tta" onmousedown="triggerHit('tta')" ontouchstart="triggerHit('tta')">
+                    따 ( lines)
+                    <span>[ K 키 ]</span>
+                </div>
+                <div class="drum-pad pad-right-side" id="pad-deok" onmousedown="triggerHit('deok')" ontouchstart="triggerHit('deok')">
+                    덕 (ʌ)
+                    <span>[ L 키 ]</span>
+                </div>
             </div>
         </div>
     </div>
@@ -464,96 +625,213 @@
     <!-- 3. 결과 화면 -->
     <div id="screen-result" class="screen">
         <div class="tab-container">
-            <div class="tab active">장단게임 결과</div>
+            <div class="tab active">장단 학습 결과 보고</div>
         </div>
 
         <div class="result-box">
             <div class="result-left">
-                <div class="score-title">총점</div>
+                <div class="score-title">최종 취득 점수</div>
                 <div class="stars" id="result-stars">★★★★★</div>
                 <div class="total-score" id="result-score">0</div>
-                <div style="background:#FFF9C4; padding:5px 15px; border-radius:15px; font-weight:bold; color:#F57F17; margin-top:10px;">
-                    참 잘했어요~!
+                <div id="result-comment" style="background:#FFF9C4; padding:6px 18px; border-radius:15px; font-weight:bold; color:#F57F17; margin-top:12px; font-size:14px;">
+                    얼씨구! 참 잘하였습니다.
                 </div>
             </div>
 
             <div class="result-right">
                 <div class="score-row">
-                    <span><span class="score-label-badge badge-combo">최대 콤보</span></span>
+                    <span><span class="score-label-badge badge-combo">최대 연타(Combo)</span></span>
                     <span id="res-combo">0 개</span>
                 </div>
                 <div class="score-row">
-                    <span><span class="score-label-badge badge-perfect">매우좋음</span></span>
+                    <span><span class="score-label-badge badge-perfect">매우좋음 (좋다)</span></span>
                     <span id="res-perfect">0 개</span>
                 </div>
                 <div class="score-row">
-                    <span><span class="score-label-badge badge-good">좋음</span></span>
+                    <span><span class="score-label-badge badge-good">좋음 (얼씨구)</span></span>
                     <span id="res-good">0 개</span>
                 </div>
                 <div class="score-row">
-                    <span><span class="score-label-badge badge-normal">보통</span></span>
+                    <span><span class="score-label-badge badge-normal">보통 (그렇지)</span></span>
                     <span id="res-normal">0 개</span>
                 </div>
                 <div class="score-row">
-                    <span><span class="score-label-badge badge-miss">실패</span></span>
+                    <span><span class="score-label-badge badge-miss">실패 (놓침)</span></span>
                     <span id="res-miss">0 개</span>
                 </div>
             </div>
         </div>
 
         <div class="result-buttons">
-            <button class="btn-action btn-retry" onclick="restartSetup()">다시하기</button>
-            <button class="btn-action btn-save" onclick="alert('점수가 저장되었습니다!')">저장하기</button>
+            <button class="btn-action btn-retry" onclick="restartSetup()">다시 연습하기</button>
+            <button class="btn-action btn-save" onclick="alert('학습 기록이 브라우저에 임시 보관되었습니다.')">기록 보관</button>
         </div>
     </div>
 </div>
 
 <script>
-    // 장단 게임 데이터 및 상태 변수
+    // AudioContext 기반 웹 오디오 신디사이저 (외부 음원 유실 방지용 고정 오디오 엔진)
+    const AudioEngine = {
+        ctx: null,
+        init() {
+            if (!this.ctx) {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        },
+        // 반주 백그라운드 국악풍 멜로디 생성기 (도라지 / 개고리 주파수 정의)
+        playMelody(type, timeOffset, duration, pitch) {
+            this.init();
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            
+            // 피리/해금 느낌의 삼각파 비주얼 소리 유도
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(pitch, this.ctx.currentTime + timeOffset);
+            
+            gain.gain.setValueAtTime(0.15, this.ctx.currentTime + timeOffset);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + timeOffset + duration);
+            
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(this.ctx.currentTime + timeOffset);
+            osc.stop(this.ctx.currentTime + timeOffset + duration);
+        },
+        // 장구 타격 피드백 자체 내장 사운드
+        playJanguSound(soundType) {
+            this.init();
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            
+            if (soundType === 'kung' || soundType === 'deong') {
+                // 낮고 웅장한 북편 소리
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(110, now);
+                osc.frequency.exponentialRampToValueAtTime(60, now + 0.15);
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+            } else {
+                // 맑고 높은 채편 소리 (따, 덕)
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+            }
+            
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.25);
+        }
+    };
+
+    // 정통 국악 장단 정보 및 악보 데이터 베이스 (정확한 박자 타임 정밀 배치)
+    // 국악 전용 판정선 기준 도달 시간을 고려하여 정교하게 타임 테이블 산출
+    const JangdanData = {
+        // 1. 도라지타령: 세마치 장단 (덩 - - | 덕 - 기 | 따 - -) 정간보 정통 규칙 변환
+        // 보통 1분박당 약 400ms~500ms 매핑
+        doraji: {
+            title: "도라지타령",
+            type: "세마치 장단",
+            duration: 13000,
+            melody: [
+                {time: 0.0, pitch: 293}, {time: 0.4, pitch: 349}, {time: 0.8, pitch: 392},
+                {time: 1.2, pitch: 440}, {time: 2.0, pitch: 392}, {time: 2.4, pitch: 440},
+                {time: 3.6, pitch: 392}, {time: 4.0, pitch: 349}, {time: 4.8, pitch: 293},
+                {time: 6.0, pitch: 349}, {time: 6.8, pitch: 392}, {time: 7.2, pitch: 440},
+                {time: 8.4, pitch: 392}, {time: 9.6, pitch: 349}, {time: 10.8, pitch: 293}
+            ],
+            notes: [
+                // 1번째 장단 조합
+                { time: 1000, type: 'deong' }, 
+                { time: 1800, type: 'deok' },  
+                { time: 2200, type: 'tta' },   
+                // 2번째 장단 조합
+                { time: 3400, type: 'deong' }, 
+                { time: 4200, type: 'deok' },  
+                { time: 4600, type: 'tta' },   
+                // 3번째 장단 조합
+                { time: 5800, type: 'deong' }, 
+                { time: 6600, type: 'deok' },  
+                { time: 7000, type: 'tta' },   
+                // 4번째 장단 조합
+                { time: 8200, type: 'deong' }, 
+                { time: 9000, type: 'deok' },  
+                { time: 9400, type: 'tta' },   
+                // 종지부 변형 장단
+                { time: 10600, type: 'deong' },
+                { time: 11400, type: 'kung' },
+                { time: 11800, type: 'tta' }
+            ]
+        },
+        // 2. 개고리 개골청: 자진모리 장단 (덩 - - | 쿵 - - | 따 - - | 구 - - 변형 및 정통 덩 덕 쿵 덕 규칙)
+        gaegori: {
+            title: "개고리 개골청",
+            type: "자진모리 장단",
+            duration: 14000,
+            melody: [
+                {time: 0.0, pitch: 330}, {time: 0.3, pitch: 392}, {time: 0.6, pitch: 330}, {time: 0.9, pitch: 293},
+                {time: 1.2, pitch: 261}, {time: 1.8, pitch: 293}, {time: 2.4, pitch: 330}, {time: 3.0, pitch: 330},
+                {time: 3.6, pitch: 392}, {time: 4.2, pitch: 440}, {time: 4.8, pitch: 392}, {time: 5.4, pitch: 330},
+                {time: 6.0, pitch: 293}, {time: 7.2, pitch: 330}, {time: 8.4, pitch: 392}, {time: 9.6, pitch: 261},
+                {time: 10.8, pitch: 293}, {time: 12.0, pitch: 330}
+            ],
+            notes: [
+                // 1회차 기본형: 덩 덕 쿵 덕
+                { time: 800, type: 'deong' },  { time: 1100, type: 'deok' },
+                { time: 1400, type: 'kung' },  { time: 1700, type: 'deok' },
+                // 2회차 변형형: 덩 덕 쿵 따 쿵 덕
+                { time: 2600, type: 'deong' }, { time: 2900, type: 'deok' },
+                { time: 3200, type: 'kung' },  { time: 3500, type: 'tta' },
+                { time: 3800, type: 'kung' },  { time: 4100, type: 'deok' },
+                // 3회차 기본형 연타
+                { time: 5000, type: 'deong' }, { time: 5300, type: 'deok' },
+                { time: 5600, type: 'kung' },  { time: 5900, type: 'deok' },
+                // 4회차 고조기 몰이형 자진박
+                { time: 6800, type: 'deong' }, { time: 7100, type: 'deok' },
+                { time: 7400, type: 'deong' }, { time: 7700, type: 'deok' },
+                { time: 8000, type: 'kung' },  { time: 8300, type: 'tta' },
+                { time: 8600, type: 'kung' },  { time: 8900, type: 'deok' },
+                // 5회차 안정형 마무리
+                { time: 9800, type: 'deong' }, { time: 10100, type: 'deok' },
+                { time: 10400, type: 'kung' }, { time: 10700, type: 'deok' },
+                { time: 11600, type: 'deong' }, { time: 12200, type: 'kung' }
+            ]
+        }
+    };
+
     let score = 0;
     let combo = 0;
     let maxCombo = 0;
     let gameInterval = null;
-    let noteSpawnTimeout = null;
     let activeNotes = [];
     let gameRunning = false;
+    let timeouts = [];
 
-    // 판정 카운터
+    // 판정 스토리지
     let countPerfect = 0;
     let countGood = 0;
     let countNormal = 0;
     let countMiss = 0;
 
-    // 자진모리 기본 리듬 배치 패턴 (시간 간격 ms, 타입 'kung' 또는 'tta')
-    const jajinmoriPattern = [
-        { time: 500, type: 'kung' },
-        { time: 900, type: 'tta' },
-        { time: 1300, type: 'kung' },
-        { time: 1700, type: 'tta' },
-        { time: 2100, type: 'kung' },
-        { time: 2300, type: 'tta' },
-        { time: 2500, type: 'kung' },
-        { time: 2900, type: 'tta' },
-        { time: 3300, type: 'kung' },
-        { time: 3700, type: 'tta' },
-        { time: 4100, type: 'kung' },
-        { time: 4300, type: 'tta' }
-    ];
-
-    // 화면 전환 함수
     function showScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
     }
 
-    // 게임 시작
+    // 리듬게임 본격 구동
     function startGame() {
-        const selectObj = document.getElementById('song-select');
-        const selectedSong = selectObj.options[selectObj.selectedIndex].text;
-        document.getElementById('playing-song-title').innerText = "곡명: " + selectedSong;
-        document.getElementById('header-title').innerText = "장단게임 플레이";
+        AudioEngine.init();
+        
+        const selectedKey = document.getElementById('song-select').value;
+        const currentData = JangdanData[selectedKey];
 
-        // 초기화
+        document.getElementById('playing-song-title').innerText = "곡명: " + currentData.title;
+        document.getElementById('playing-jangdan-type').innerText = "장단: " + currentData.type;
+        document.getElementById('header-title').innerText = "리듬 연주 중";
+
+        // 변수 일체 세팅
         score = 0;
         combo = 0;
         maxCombo = 0;
@@ -562,53 +840,73 @@
         countNormal = 0;
         countMiss = 0;
         activeNotes = [];
+        timeouts.forEach(clearTimeout);
+        timeouts = [];
         document.getElementById('note-zone').innerHTML = '';
         updateUI();
-
         showScreen('screen-game');
         gameRunning = true;
 
-        // 노트 소환 시작
-        const startTime = Date.now();
-        jajinmoriPattern.forEach(noteData => {
-            noteSpawnTimeout = setTimeout(() => {
-                if(gameRunning) spawnNote(noteData.type);
-            }, noteData.time);
+        // 음원 합성 엔진 구동 (각 음악 고유 멜로디 시퀀싱 스케줄링)
+        currentData.melody.forEach(m => {
+            AudioEngine.playMelody(selectedKey, m.time, 0.5, m.pitch);
         });
 
-        // 애니메이션 프레임 루프 구동
-        gameInterval = setInterval(updateNotes, 20);
+        // 노트 정밀 생성 타임아웃 예약 등록
+        currentData.notes.forEach(note => {
+            let t = setTimeout(() => {
+                if (gameRunning) spawnNote(note.type);
+            }, note.time);
+            timeouts.push(t);
+        });
 
-        // 패턴 종료 후 6.5초 뒤 결과창 이동
-        setTimeout(() => {
-            if(gameRunning) endGame();
-        }, 6500);
+        // 애니메이션 루프 피드백 (주기 16ms 단위 세밀 제어)
+        gameInterval = setInterval(updateNotes, 16);
+
+        // 음원 길이 종료 연동 후 결과창 화면 전환 유도
+        let endT = setTimeout(() => {
+            if (gameRunning) endGame();
+        }, currentData.duration);
+        timeouts.push(endT);
     }
 
-    // 노트 생성
+    // 신규 분리형 노트 배치 기법
     function spawnNote(type) {
         const zone = document.getElementById('note-zone');
         const noteEl = document.createElement('div');
         noteEl.classList.add('note', `type-${type}`);
-        noteEl.innerText = type === 'kung' ? '쿵' : '따';
-        noteEl.style.left = '850px'; 
+        
+        // 국악 기호 텍스트 변환 매핑
+        let text = '쿵';
+        if (type === 'deong') text = '덩';
+        if (type === 'tta') text = '따';
+        if (type === 'deok') text = '덕';
+        noteEl.innerText = text;
+
+        // 레일 분할 규칙: 상단 레일(덩, 쿵) - y축 15px / 하단 레일(따, 덕) - y축 95px
+        let topPosition = (type === 'deong' || type === 'kung') ? 15 : 95;
+        noteEl.style.top = topPosition + 'px';
+        noteEl.style.left = '840px'; // 우측 시작 기점 보정
+        
         zone.appendChild(noteEl);
 
         activeNotes.push({
             element: noteEl,
-            position: 850,
-            type: type
+            position: 840,
+            type: type,
+            top: topPosition
         });
     }
 
-    // 노트 이동 및 경계 만료 처리
+    // 노트 이동 및 범위 실시간 연산
     function updateNotes() {
         for (let i = activeNotes.length - 1; i >= 0; i--) {
             let note = activeNotes[i];
-            note.position -= 5;
+            note.position -= 4.5; // 가독성 확보를 위한 부드러운 유동 프레임 스피드
             note.element.style.left = note.position + 'px';
 
-            if (note.position < 50) {
+            // 완전히 도달 박스(좌측 마진 60px) 이하 탈출 시 자동 미스 피드백
+            if (note.position < 60) {
                 note.element.remove();
                 activeNotes.splice(i, 1);
                 triggerMiss();
@@ -616,33 +914,40 @@
         }
     }
 
-    // 유저 입력 처리
+    // 사용자 입력 판정 세부 필터링 함수
     function triggerHit(type) {
         if (!gameRunning) return;
 
-        const targetPos = 120;
+        // 자체 악기 효과음 연주
+        AudioEngine.playJanguSound(type);
+
+        // 판정 중심 타겟 링 포인트 좌측 여백 계측치 수치 매핑
+        const targetPos = 140; 
         let judged = false;
 
         for (let i = 0; i < activeNotes.length; i++) {
             let note = activeNotes[i];
+            
+            // 입력된 키와 타겟 노트 종류 일치 여부 비교
             if (note.type === type) {
                 let distance = Math.abs(note.position - targetPos);
 
-                if (distance < 25) {
-                    showToast('좋다! (매우좋음)', '#2ECC71');
-                    score += 15;
+                // 정밀 국악 추적 기준 반경 검사
+                if (distance < 24) {
+                    showToast('좋다! 덩기덕!', '#2ECC71');
+                    score += 20;
                     combo++;
                     countPerfect++;
                     judged = true;
-                } else if (distance < 45) {
-                    showToast('얼씨구 (좋음)', '#3498DB');
-                    score += 10;
+                } else if (distance < 48) {
+                    showToast('얼씨구!', '#3498DB');
+                    score += 12;
                     combo++;
                     countGood++;
                     judged = true;
-                } else if (distance < 70) {
-                    showToast('보통', '#F1C40F');
-                    score += 5;
+                } else if (distance < 75) {
+                    showToast('그렇지!', '#F1C40F');
+                    score += 6;
                     combo++;
                     countNormal++;
                     judged = true;
@@ -658,6 +963,7 @@
         }
 
         if (!judged) {
+            // 박자 이탈 혹은 공타 시 처리
             triggerMiss();
         }
         updateUI();
@@ -666,7 +972,7 @@
     function triggerMiss() {
         combo = 0;
         countMiss++;
-        showToast('실패', '#E74C3C');
+        showToast('놓침', '#E74C3C');
         updateUI();
     }
 
@@ -680,35 +986,45 @@
         toast.innerText = text;
         toast.style.color = color;
         toast.style.animation = 'none';
-        void toast.offsetWidth;
-        toast.style.animation = 'popUp 0.4s ease-out forwards';
+        void toast.offsetWidth; 
+        toast.style.animation = 'popUp 0.35s ease-out forwards';
     }
 
+    // 결과 정산 창 도출
     function endGame() {
         gameRunning = false;
         clearInterval(gameInterval);
-        clearTimeout(noteSpawnTimeout);
+        timeouts.forEach(clearTimeout);
         
         document.getElementById('result-score').innerText = score;
-        document.getElementById('res-combo').innerText = maxCombo + " 개";
+        document.getElementById('res-combo').innerText = maxCombo + " 연타";
         document.getElementById('res-perfect').innerText = countPerfect + " 개";
         document.getElementById('res-good').innerText = countGood + " 개";
         document.getElementById('res-normal').innerText = countNormal + " 개";
         document.getElementById('res-miss').innerText = countMiss + " 개";
 
+        // 종합 평가 점수 텍스트 커스터마이징
         let stars = '★★★☆☆';
-        if (score > 120) stars = '★★★★★';
-        else if (score > 80) stars = '★★★★☆';
-        else if (score > 40) stars = '★★★☆☆';
-        else stars = '★★☆☆☆';
+        let comment = '조금 더 연습해볼까요? 장단 박자를 잘 들어보세요.';
+        if (score >= 200) {
+            stars = '★★★★★';
+            comment = '명창의 호흡이 느껴집니다! 명인 수준의 장단 감각입니다.';
+        } else if (score >= 120) {
+            stars = '★★★★☆';
+            comment = '얼씨구! 참 잘하셨습니다. 리듬감이 매우 뛰어납니다.';
+        } else if (score >= 60) {
+            stars = '★★★☆☆';
+            comment = '잘 따라오고 있습니다! 정간보를 보며 리듬을 조금만 더 익혀봅시다.';
+        }
+        
         document.getElementById('result-stars').innerText = stars;
-
-        document.getElementById('header-title').innerText = "장단게임 결과";
+        document.getElementById('result-comment').innerText = comment;
+        document.getElementById('header-title').innerText = "학습 결과 보고서";
         showScreen('screen-result');
     }
 
     function restartSetup() {
-        document.getElementById('header-title').innerText = "장단배우기";
+        document.getElementById('header-title').innerText = "국악 장단 배우기";
         showScreen('screen-setup');
     }
 
@@ -716,27 +1032,34 @@
         restartSetup();
     }
 
+    // 키보드 맵핑 (A:덩 / S:쿵 / K:따 / L:덕) 물리 입력 바인딩 완료
     window.addEventListener('keydown', (e) => {
         if(e.repeat) return;
-        if (e.key === 'a' || e.key === 'A' || e.key === 'ㅁ') {
-            const pad = document.getElementById('pad-left');
-            pad.classList.add('pressed');
+        const key = e.key.toLowerCase();
+        if (key === 'a' || e.key === 'ㅁ') {
+            document.getElementById('pad-deong').classList.add('pressed');
+            triggerHit('deong');
+        }
+        if (key === 's' || e.key === 'ㄴ') {
+            document.getElementById('pad-kung').classList.add('pressed');
             triggerHit('kung');
         }
-        if (e.key === 'l' || e.key === 'L' || e.key === 'ㅣ') {
-            const pad = document.getElementById('pad-right');
-            pad.classList.add('pressed');
+        if (key === 'k' || e.key === 'ㅏ') {
+            document.getElementById('pad-tta').classList.add('pressed');
             triggerHit('tta');
+        }
+        if (key === 'l' || e.key === 'ㅣ') {
+            document.getElementById('pad-deok').classList.add('pressed');
+            triggerHit('deok');
         }
     });
 
     window.addEventListener('keyup', (e) => {
-        if (e.key === 'a' || e.key === 'A' || e.key === 'ㅁ') {
-            document.getElementById('pad-left').classList.remove('pressed');
-        }
-        if (e.key === 'l' || e.key === 'L' || e.key === 'ㅣ') {
-            document.getElementById('pad-right').classList.remove('pressed');
-        }
+        const key = e.key.toLowerCase();
+        if (key === 'a' || e.key === 'ㅁ') document.getElementById('pad-deong').classList.remove('pressed');
+        if (key === 's' || e.key === 'ㄴ') document.getElementById('pad-kung').classList.remove('pressed');
+        if (key === 'k' || e.key === 'ㅏ') document.getElementById('pad-tta').classList.remove('pressed');
+        if (key === 'l' || e.key === 'ㅣ') document.getElementById('pad-deok').classList.remove('pressed');
     });
 </script>
 
